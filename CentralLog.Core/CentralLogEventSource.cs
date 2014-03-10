@@ -6,30 +6,64 @@ using Microsoft.Diagnostics.Tracing;
 
 namespace CentralLog.Core
 {
-  public static class CentralLogProxy
-  {
-    public static ICentralLogEventSource Log { get { return CentralLogEventSource.Log; } }
-  }
+    public static class CentralLogProxy
+    {
+        public static ICentralLogEventSource Log { get { return CentralLogEventSource.Log; } }
+    }
 
 
-  public interface ICentralLogEventSource
-  {
-    void LogMessage(string sender, string receiver, string data);
-  }
+    public interface ICentralLogEventSource
+    {
+        void LogInfo(string message);
+        void LogWarning(string message);
+        void LogError(Exception ex, string message = null);
+        void LogData(object data);
+    }
 
-  // This code belongs in the process generating the events.  They are samples 
-  [EventSource( Name = GlobalDefines.EVENT_SOURCE_NAME )]     // This is the name of my eventSource outside my program.  
-  sealed class CentralLogEventSource : EventSource, ICentralLogEventSource
-  {
-    // Notice that the bodies of the events follow a pattern:  WriteEvent(ID, <args>) where ID is a unique ID 
-    // Starting at 1 and giving each different event a unque one, and passing all the payload arguments on to be sent out.
-    [Event( 1 )]
-    public void LogMessage(string sender, string receiver, string data) { WriteEvent( 1, sender, receiver, data ); }
+    // This code belongs in the process generating the events.  They are samples 
+    [EventSource(Name = GlobalDefines.EVENT_SOURCE_NAME)]     // This is the name of my eventSource outside my program.  
+    sealed class CentralLogEventSource : EventSource, ICentralLogEventSource
+    {
 
-    // Typically you only create one EventSource and use it throughout your program.  Thus a static field makes sense.  
-    public static CentralLogEventSource Log = new CentralLogEventSource();
+        // Typically you only create one EventSource and use it throughout your program.  Thus a static field makes sense.  
+        public static CentralLogEventSource Log = new CentralLogEventSource();
 
-  }
+        [NonEvent]
+        public void LogData(object data)
+        {
+            this.LogData("todo");
+        }
+
+        [NonEvent]
+        public void LogError(Exception ex, string message = null)
+        {
+            this.LogError("todo");
+        }
+
+        [Event(1)]        
+        public void LogInfo(string message)
+        {
+            WriteEvent(1, message);
+        }
+
+        [Event(2)]        
+        public void LogWarning(string message)
+        {
+            throw new NotImplementedException();
+        }
+
+        [Event(3)]
+        public void LogError(string ex, string message = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        [Event(4)]
+        public unsafe void LogData(string json)
+        {
+            throw new NotImplementedException();
+        }
+    }
 
 
 }

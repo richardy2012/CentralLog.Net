@@ -10,18 +10,33 @@ using CentralLog.Core;
 
 namespace CentralLog.EventGeneratorDemo
 {
-  public partial class frm_EventGeneratorDemo : Form
-  {
-    public frm_EventGeneratorDemo()
+    public partial class frm_EventGeneratorDemo : Form
     {
-      InitializeComponent();
+        public frm_EventGeneratorDemo()
+        {
+            InitializeComponent();
+            StartDemoLogging();
+        }
+
+        private void StartDemoLogging()
+        {
+            Timer timer = new Timer();
+            timer.Interval = 200;
+
+            int i = 1;
+            timer.Tick += (me, args) => CentralLogProxy.Log.LogInfo("this is test message #" + i++);
+            timer.Start();
+        }
+
+
+        private void btn_LogEvent_Click(object sender, EventArgs e)
+        {
+            CentralLogProxy.Log.LogInfo(this.tbx_EventMessage.Text);
+
+            
+
+        }
     }
 
-    private void btn_LogEvent_Click(object sender, EventArgs e)
-    {
-      CentralLogProxy.Log.LogMessage( "Hans", "Paul", this.tbx_EventMessage.Text );
-    }
-  }
 
-  
 }
