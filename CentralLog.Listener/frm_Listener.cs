@@ -48,7 +48,28 @@ namespace CentralLog.Listener
 
                 if (_hubConnection != null && _hubConnection.State == ConnectionState.Connected)
                 {
-                    _centralLogHubProxy.Invoke("Log", data.PayloadByName("sender") , data.PayloadByName("data"));
+                    switch (data.EventName)
+                    {
+                        case "LogInfo":
+                            _centralLogHubProxy.Invoke("Log","info", data.PayloadByName("message") , data.PayloadByName("jobId") ?? string.Empty);
+                            break;
+                        case "LogWarning":
+                            _centralLogHubProxy.Invoke("Log","warning", data.PayloadByName("message"), data.PayloadByName("jobId"));
+                            break;
+                        case "LogError":
+                            _centralLogHubProxy.Invoke("LogError", data.PayloadByName("exception") , data.PayloadByName("message"), data.PayloadByName("jobId"));
+                            break;
+                        case "LogData":
+                            _centralLogHubProxy.Invoke("LogData", data.PayloadByName("jsonData"), data.PayloadByName("jobId"));
+                            break;
+                        case "LogJobStart":
+                            _centralLogHubProxy.Invoke("LogJobStart", data.PayloadByName("jobId"), data.PayloadByName("message"));
+                            break;
+                        case "LogJobEnd":
+                            _centralLogHubProxy.Invoke("LogJobEnd", data.PayloadByName("jobId"), data.PayloadByName("message"));
+                            break;
+                    }
+
                 }
             };
 
