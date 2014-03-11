@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="CentralLogEventSource.cs" />
     <Compile Include="GlobalDefines.cs" />
+    <Compile Include="ICentralLogEventSource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
