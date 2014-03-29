@@ -25,32 +25,33 @@ namespace CentralLog.EventGeneratorDemo
         private void StartDemoLogging()
         {
             int i = 1;
-            var jobRun = new Task(() =>
+            Action jobMethod = () =>
             {
                 string jobId = Guid.NewGuid().ToString();
                 Thread.Sleep(4000);
 
-                CentralLogProxy.Log.LogJobStart(jobId, string.Format("This is the best job you have ever seen. JobID: {0}", jobId));
+                CentralLogProxy.Log.JobStart(jobId);
 
                 for (int j = 0; j < 10; j++)
                 {
                     Thread.Sleep(2000);
-                    CentralLogProxy.Log.LogInfo("this is test message #" + i++, jobId);
+                    CentralLogProxy.Log.Step("this is test message #" + i++, jobId);
                 }
 
                 // throw a demo exception on every 2cnd run
                 if (i % 2 == 1)
                 {
                     var exception = new ApplicationException("Demo Exception");
-                    CentralLogProxy.Log.LogError(exception, "Throw it if you can", jobId);
+                    CentralLogProxy.Log.Step("Throw it if you can", jobId);
                 }
 
-                CentralLogProxy.Log.LogJobEnd(jobId, "We have completed a legendary job.");
+                CentralLogProxy.Log.JobEnd(jobId);
                 i++;
-            });
+            };
 
             for (int j = 0; j < 10; j++)
             {
+                Task jobRun = new Task(jobMethod);
                 jobRun.Start();
                 jobRun.Wait();
             }
@@ -60,7 +61,7 @@ namespace CentralLog.EventGeneratorDemo
 
         private void btn_LogEvent_Click(object sender, EventArgs e)
         {
-            CentralLogProxy.Log.LogInfo(this.tbx_EventMessage.Text);
+            CentralLogProxy.Log.Step(this.tbx_EventMessage.Text);
 
 
 
