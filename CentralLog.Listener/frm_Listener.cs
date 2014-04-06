@@ -30,8 +30,15 @@ namespace CentralLog.Listener
       // Form Initialization
       this.tbx_SignalrHost.Text = ConfigurationManager.AppSettings["SignalrHost"];
 
+      // Start ETW Listening
       var backgroundTask = new Task( StartListening, TaskCreationOptions.LongRunning );
       backgroundTask.Start();
+
+      // Connect to Signalr Hub
+      var hubAddress = this.tbx_SignalrHost.Text;
+      _hubConnection = new HubConnection( hubAddress );
+      _centralLogHubProxy = _hubConnection.CreateHubProxy( "CentralLogHub" );
+      _hubConnection.Start().Wait();
     }
 
     private void StartListening()
@@ -89,12 +96,12 @@ namespace CentralLog.Listener
 
     private void btn_ConnectHub_Click(object sender, EventArgs e)
     {
-      var hubAddress = this.tbx_SignalrHost.Text;
-      _hubConnection = new HubConnection( hubAddress );
+      //var hubAddress = this.tbx_SignalrHost.Text;
+      //_hubConnection = new HubConnection( hubAddress );
 
-      _centralLogHubProxy = _hubConnection.CreateHubProxy( "CentralLogHub" );
-      //centralLogHubProxy.On<Stock>("UpdateStockPrice", stock => Console.WriteLine("Stock update for {0} new price {1}", stock.Symbol, stock.Price));
-      _hubConnection.Start().Wait();
+      //_centralLogHubProxy = _hubConnection.CreateHubProxy( "CentralLogHub" );
+      ////centralLogHubProxy.On<Stock>("UpdateStockPrice", stock => Console.WriteLine("Stock update for {0} new price {1}", stock.Symbol, stock.Price));
+      //_hubConnection.Start().Wait();
     }
 
 
