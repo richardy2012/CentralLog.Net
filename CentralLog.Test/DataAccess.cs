@@ -21,12 +21,12 @@ namespace CentralLog.Test
     {
       var job = new Job()
       {
-        JobId = Guid.NewGuid().ToString()
+        Id = Guid.NewGuid().ToString()
       };
 
       var jobRunId = Guid.NewGuid().ToString();
 
-      _repository.AddJobRunStart( job.JobId, jobRunId );
+      _repository.AddJobRunStart( job.Id, jobRunId );
 
       // todo: check wether we created a job and a job run
       

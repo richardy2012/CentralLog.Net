@@ -22,9 +22,9 @@ namespace SignalRChat
       Clients.All.broadcastMessage( jobId, json );
     }
 
-    public void JobStart(string jobId, string jobRunId)
+    public void JobStart(string jobId, string jobName, string jobRunId)
     {
-      Job job = _repository.CreateUpdateJob( jobId );
+      Job job = _repository.SaveJob( jobId,jobName );
 
       _repository.AddJobRunStart( jobId, jobRunId );
 

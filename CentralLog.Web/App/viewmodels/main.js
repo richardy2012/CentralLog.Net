@@ -1,7 +1,7 @@
 ﻿define(function () {
     var ctor = function () {
-        this.projectName = 'Best Project Ever';
-
+        this.projectName = 'CentralLog';
+        var self = this;
         var moduletestGroup = {
             name: "Modultests", subgroups: [
                 { name: "ProductRepositoryTests", count: 123 },
@@ -26,7 +26,13 @@
             ]
         };
 
-        this.jobGroups = [moduletestGroup, integrationtestGroup, systemtestGroup];
+        this.jobs = ko.observableArray();
+
+        $.getJSON("api/jobs", {}, function (result) {
+            console.log("jobs:", result);
+            self.jobs(result);
+        })
+
         this.description = 'This is the main entrance page for the Central Log Project.';
        
     };

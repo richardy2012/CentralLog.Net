@@ -8,8 +8,9 @@
         },
         activate: function () {
             router.map([
-                { route: '', title: 'Welcome', moduleId: 'viewmodels/welcome', nav: true },
-                { route: 'flickr', moduleId: 'viewmodels/flickr', nav: true }
+                { route: '', title: 'Main', moduleId: 'viewmodels/main', nav: true },
+                { route: 'groups/edit', title: 'Edit Groups', moduleId: 'viewmodels/groups/edit', nav: true }
+                //{ route: 'flickr', moduleId: 'viewmodels/flickr', nav: true }
             ]).buildNavigationModel();
 
             return router.activate();

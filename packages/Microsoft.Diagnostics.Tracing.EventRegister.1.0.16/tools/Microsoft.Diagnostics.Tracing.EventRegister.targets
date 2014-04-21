@@ -58,7 +58,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
       <EtwManifestOutDir    Condition="'$(EtwManifestOutDir)' != '' and !HasTrailingSlash('$(EtwManifestOutDir)')">$(EtwManifestOutDir)\</EtwManifestOutDir>
       <EtwManifestBaseName  Condition="'$(EtwManifestBaseName)' == ''">$(AssemblyName)</EtwManifestBaseName>
       <EtwManifestGenerator Condition="$(EtwManifestGenerator) == ''">builtin</EtwManifestGenerator>
-      <EtwManifestForceAll  Condition="$(EtwManifestForceAll) != 'true'">false</EtwManifestForceAll>
+      <EtwManifestForceAll  Condition="$(EtwManifestForceAll) != 'true'">true</EtwManifestForceAll>
     </PropertyGroup>
 
     <PropertyGroup>

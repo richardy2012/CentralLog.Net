@@ -45,6 +45,9 @@
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\packages\WebGrease.1.1.0\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="Humanizer">
+      <HintPath>..\packages\Humanizer.1.23.1\lib\portable-win+net40+sl50+wp8\Humanizer.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.AspNet.SignalR.Core">
       <HintPath>..\packages\Microsoft.AspNet.SignalR.Core.2.0.2\lib\net45\Microsoft.AspNet.SignalR.Core.dll</HintPath>
     </Reference>
@@ -152,6 +155,7 @@
     <Compile Include="App_Start\DurandalConfig.cs" />
     <Compile Include="CentralLogHub.cs" />
     <Compile Include="Controllers\DurandalController.cs" />
+    <Compile Include="Controllers\JobsController.cs" />
     <Compile Include="DataAccess\JobRepository.cs" />
     <Compile Include="Models\JobRun.cs" />
     <Compile Include="Global.asax.cs">
@@ -167,16 +171,19 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Content Include="App\main.js" />
     <Content Include="App\viewmodels\flickr.js" />
+    <Content Include="App\viewmodels\groups\edit.js" />
     <Content Include="App\viewmodels\shell.js" />
-    <Content Include="App\viewmodels\welcome.js" />
+    <Content Include="App\viewmodels\main.js" />
     <Content Include="App\views\detail.html" />
     <Content Include="App\views\flickr.html" />
+    <Content Include="App\views\groups\edit.html" />
     <Content Include="App\views\shell.html" />
-    <Content Include="App\views\welcome.html" />
+    <Content Include="App\views\main.html" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\central-log.css" />
     <Content Include="Content\durandal.css" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
@@ -244,8 +251,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Controllers\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -266,7 +271,7 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerPort>3413</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:8320/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

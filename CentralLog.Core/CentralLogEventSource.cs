@@ -13,13 +13,13 @@ namespace CentralLog.Core
   }
 
   // This code belongs in the process generating the events.  They are samples 
-  [EventSource( Name = GlobalDefines.EVENT_SOURCE_NAME )]     // This is the name of my eventSource outside my program.  
+  [EventSource( Name = GlobalDefines.EVENT_SOURCE_NAME)]     // This is the name of my eventSource outside my program.  
   sealed class CentralLogEventSource : EventSource, ICentralLogEventSource
   {
     // Typically you only create one EventSource and use it throughout your program.  Thus a static field makes sense.  
     public static CentralLogEventSource Log = new CentralLogEventSource();
 
-    string _localJobRunId = string.Empty;
+    string _currentRunId = string.Empty;
     string _currentJobId = string.Empty;
     object _locker = new object();
 
@@ -33,14 +33,14 @@ namespace CentralLog.Core
     [Event( 1 )]
     public void Step(string jsonData, string jobId = null, string jobRunId = null)
     {
-      WriteEvent( 1, jsonData, jobId ?? _currentJobId, jobRunId ?? _localJobRunId );
+      WriteEvent( 1, jsonData, jobId ?? _currentJobId, jobRunId ?? _currentRunId );
     }
 
     [Event( 2 )]
     public void JobStart(string jobId, string jobName, string jobRunId = null)
     {
-      OptionalJobRunInit( jobRunId,jobRunId );
-      WriteEvent( 2, _currentJobId, jobName, jobRunId ?? _localJobRunId );
+      OptionalJobRunInit( jobId,jobRunId );
+      WriteEvent( 2, _currentJobId, jobName, jobRunId ?? _currentRunId );
     }
 
     [Event( 3 )]
@@ -48,10 +48,12 @@ namespace CentralLog.Core
     {
       lock (_locker)
       {
-        WriteEvent( 3, jobId, jobRunId ??_localJobRunId );
-        _localJobRunId = null;
+        WriteEvent( 3, jobId, jobRunId ??_currentRunId );
+        _currentRunId = null;
       }
     }
+
+   
 
     // Todo, not save for multiple jobs without runId
     private string OptionalJobRunInit(string jobId, string runId)
@@ -62,17 +64,17 @@ namespace CentralLog.Core
 
         if (string.IsNullOrEmpty( runId ))
         {
-          _localJobRunId = Guid.NewGuid().ToString();
+          _currentRunId = Guid.NewGuid().ToString();
         }
         else
         {
-          _localJobRunId = runId;
+          _currentRunId = runId;
         }
 
 
       }
 
-      return _localJobRunId;
+      return _currentRunId;
     }
 
   }

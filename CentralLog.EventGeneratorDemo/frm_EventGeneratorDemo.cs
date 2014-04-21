@@ -20,13 +20,10 @@ namespace CentralLog.EventGeneratorDemo
     public frm_EventGeneratorDemo()
     {
       InitializeComponent();
-      var demoLogRun = new Task( StartDemoLogging );
-      demoLogRun.Start();
     }
 
     private void StartDemoLogging()
     {
-      Thread.Sleep(4000);
       int i = 1;
       Action jobMethod = () =>
       {
@@ -75,7 +72,7 @@ namespace CentralLog.EventGeneratorDemo
 
     private void btn_LogEvent_Click(object sender, EventArgs e)
     {
-      CentralLogProxy.Log.Step( this.tbx_EventMessage.Text );
+      this.StartDemoLogging();
     }
   }
 

@@ -31,15 +31,7 @@ namespace CentralLog.Listener
       // Form Initialization
       this.tbx_SignalrHost.Text = ConfigurationManager.AppSettings["SignalrHost"];
 
-      // Start ETW Listening
-      var backgroundTask = new Task( StartListening, TaskCreationOptions.LongRunning );
-      backgroundTask.Start();
-
-      // Connect to Signalr Hub
-      var hubAddress = this.tbx_SignalrHost.Text;
-      _hubConnection = new HubConnection( hubAddress );
-      _centralLogHubProxy = _hubConnection.CreateHubProxy( "CentralLogHub" );
-      _hubConnection.Start().Wait();
+      
     }
 
     private void StartListening()
@@ -53,18 +45,31 @@ namespace CentralLog.Listener
         // Subscribe to all EventSource events
         //OutputEvent( data.Dump() );
 
+
+        if (data.EventName != "JobStart" && data.EventName != "JobEnd" && data.EventName != "Step") return;
+
+
         if (_hubConnection != null && _hubConnection.State == ConnectionState.Connected)
         {
           string jsonData = data.PayloadByName( "jsonData" ) as string;
           object jobId = data.PayloadByName( "jobId" );
           object jobRunId = data.PayloadByName( "jobRunId" );
 
+
           Stopwatch watch = new Stopwatch();
 
           watch.Restart();
           if (string.IsNullOrEmpty( jsonData ))
           {
-            _centralLogHubProxy.Invoke( data.EventName, jobId, jobRunId ).Wait();
+            if (data.EventName == "JobStart")
+            {
+              object jobName = data.PayloadByName( "jobName" ) as string;
+              _centralLogHubProxy.Invoke( data.EventName, jobId, jobName, jobRunId ).Wait();
+            }
+            else
+            {
+              _centralLogHubProxy.Invoke( data.EventName, jobId, jobRunId ).Wait();
+            }
           }
           else
           {
@@ -101,12 +106,27 @@ namespace CentralLog.Listener
 
     private void btn_ConnectHub_Click(object sender, EventArgs e)
     {
-      //var hubAddress = this.tbx_SignalrHost.Text;
-      //_hubConnection = new HubConnection( hubAddress );
+      // Start ETW Listening
+      var backgroundTask = new Task( StartListening, TaskCreationOptions.LongRunning );
+      backgroundTask.Start();
 
-      //_centralLogHubProxy = _hubConnection.CreateHubProxy( "CentralLogHub" );
-      ////centralLogHubProxy.On<Stock>("UpdateStockPrice", stock => Console.WriteLine("Stock update for {0} new price {1}", stock.Symbol, stock.Price));
-      //_hubConnection.Start().Wait();
+      // Connect to Signalr Hub
+      var hubAddress = this.tbx_SignalrHost.Text;
+      _hubConnection = new HubConnection( hubAddress );
+      _centralLogHubProxy = _hubConnection.CreateHubProxy( "CentralLogHub" );
+
+      _hubConnection.StateChanged += _hubConnection_StateChanged;
+      _hubConnection.Start();
+    }
+
+    void _hubConnection_StateChanged(StateChange obj)
+    {
+      OutputEvent(obj.NewState.ToString());
+    }
+
+    private void btn_TestSend_Click(object sender, EventArgs args) 
+    {
+      _centralLogHubProxy.Invoke( "JobStart", "Manual Job ID", "TestName", "Manual Job Run ID" ).Wait();
     }
 
 

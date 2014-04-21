@@ -44,19 +44,26 @@ namespace CentralLog.Web.DataAccess
       stepCollection.Insert( logStep );
     }
 
-    internal Models.Job CreateUpdateJob(string jobId)
+    internal Models.Job SaveJob(string jobId, string jobName)
     {
-      var jobCollection = _database.GetCollection<Job>("jobs");
+      var jobCollection = GetJobCollection();
 
       var job = new Job()
       {
-        JobId = jobId,
+        Id = jobId,
+        Name = jobName,
         LatestRun = DateTime.UtcNow
       };
 
       jobCollection.Save(job);
 
       return job;
+    }
+
+    private MongoCollection<Job> GetJobCollection()
+    {
+      var jobCollection = _database.GetCollection<Job>("jobs");
+      return jobCollection;
     }
 
     internal void AddJobRunStart(string jobId, string jobRunId)
@@ -90,6 +97,13 @@ namespace CentralLog.Web.DataAccess
 
     internal void AddStartJob(string jobId, string jobRunId)
     {
+    }
+
+    internal IEnumerable<Job> GetJobs()
+    {
+      var jobCollection = this.GetJobCollection();
+
+      return jobCollection.FindAll();
     }
   }
 }
