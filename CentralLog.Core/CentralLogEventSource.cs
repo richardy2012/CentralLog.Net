@@ -37,10 +37,10 @@ namespace CentralLog.Core
     }
 
     [Event( 2 )]
-    public void JobStart(string jobId, string jobRunId = null)
+    public void JobStart(string jobId, string jobName, string jobRunId = null)
     {
-      OptionalJobRunInit( jobId, jobRunId );
-      WriteEvent( 2, jobId, jobRunId ?? _localJobRunId );
+      OptionalJobRunInit( jobRunId,jobRunId );
+      WriteEvent( 2, _currentJobId, jobName, jobRunId ?? _localJobRunId );
     }
 
     [Event( 3 )]
@@ -53,18 +53,12 @@ namespace CentralLog.Core
       }
     }
 
+    // Todo, not save for multiple jobs without runId
     private string OptionalJobRunInit(string jobId, string runId)
     {
       lock (_locker)
       {
-        if (string.IsNullOrEmpty( jobId ))
-        {
-          _currentJobId = Guid.NewGuid().ToString();
-        }
-        else
-        {
           _currentJobId = jobId;
-        }
 
         if (string.IsNullOrEmpty( runId ))
         {

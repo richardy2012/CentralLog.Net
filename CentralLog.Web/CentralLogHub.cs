@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web;
 using CentralLog.Web.DataAccess;
+using CentralLog.Web.Models;
 using Microsoft.AspNet.SignalR;
 namespace SignalRChat
 {
@@ -23,11 +24,17 @@ namespace SignalRChat
 
     public void JobStart(string jobId, string jobRunId)
     {
+      Job job = _repository.CreateUpdateJob( jobId );
+
+      _repository.AddJobRunStart( jobId, jobRunId );
+
       Clients.All.broadcastMessage( "jobstart", "JobStarted");
     }
 
     public void JobEnd(string jobId, string jobRunId)
     {
+      _repository.AddJobEnd(jobId, jobRunId);
+
       Clients.All.broadcastMessage( "JobEnd", "JobEnded" );
     }
 

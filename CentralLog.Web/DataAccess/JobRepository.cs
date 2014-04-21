@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using CentralLog.Web.Models;
 using CommonUtilities.Repository;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -42,6 +43,50 @@ namespace CentralLog.Web.DataAccess
 
       var stepCollection = _database.GetCollection( "steps" );
       stepCollection.Insert( logStep );
+    }
+
+    internal Models.Job CreateUpdateJob(string jobId)
+    {
+      var jobCollection = _database.GetCollection<Job>("jobs");
+
+      var job = new Job()
+      {
+        JobId = jobId,
+        LatestRun = DateTime.UtcNow
+      };
+
+      jobCollection.Save(job);
+
+      return job;
+    }
+
+    internal void AddJobRunStart(string jobId, string jobRunId)
+    {
+      var jobRunCollection = GetJobRunCollection();
+
+      jobRunCollection.Save(new JobRun()
+      {
+        JobRunId = jobRunId,
+        JobId = jobId,
+        TimeStamp = DateTime.UtcNow
+      });
+    }
+
+    private MongoCollection<JobRun> GetJobRunCollection()
+    {
+      return _database.GetCollection<JobRun>("jobRuns");
+    }
+
+    internal void AddJobEnd(string jobId, string jobRunId)
+    {
+      var jobRunCollection = this.GetJobRunCollection();
+
+      jobRunCollection.Save( new JobRun()
+      {
+        JobRunId = jobRunId,
+        JobId = jobId,
+        EndTimeStamp = DateTime.UtcNow
+      } );
     }
   }
 }

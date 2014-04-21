@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -50,8 +51,7 @@ namespace CentralLog.Listener
       _session.Source.Dynamic.All += delegate(TraceEvent data)              // Set Source (stream of events) from session.  
       {                                                                    // Get dynamic parser (knows about EventSources) 
         // Subscribe to all EventSource events
-        Console.WriteLine( "GOT Event " + data );                          // Print each message as it comes in 
-        OutputEvent( data.Dump() );
+        //OutputEvent( data.Dump() );
 
         if (_hubConnection != null && _hubConnection.State == ConnectionState.Connected)
         {
@@ -59,14 +59,19 @@ namespace CentralLog.Listener
           object jobId = data.PayloadByName( "jobId" );
           object jobRunId = data.PayloadByName( "jobRunId" );
 
+          Stopwatch watch = new Stopwatch();
+
+          watch.Restart();
           if (string.IsNullOrEmpty( jsonData ))
           {
-            _centralLogHubProxy.Invoke( data.EventName, jobId, jobRunId );
+            _centralLogHubProxy.Invoke( data.EventName, jobId, jobRunId ).Wait();
           }
           else
           {
-            _centralLogHubProxy.Invoke( data.EventName, jobId, jobRunId, jsonData );
+            _centralLogHubProxy.Invoke( data.EventName, jobId, jobRunId, jsonData ).Wait();
           }
+          watch.Stop();
+          //Console.WriteLine( "sending took {0}ms",watch.ElapsedMilliseconds);
 
         }
       };

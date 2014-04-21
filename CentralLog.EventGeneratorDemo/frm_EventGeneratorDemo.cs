@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -25,16 +26,20 @@ namespace CentralLog.EventGeneratorDemo
 
     private void StartDemoLogging()
     {
+      Thread.Sleep(4000);
       int i = 1;
       Action jobMethod = () =>
       {
+        var stopwatch = new Stopwatch();
+        stopwatch.Restart();
+
         string jobId = Guid.NewGuid().ToString();
 
-        CentralLogProxy.Log.JobStart( jobId );
+        CentralLogProxy.Log.JobStart( i.ToString(), string.Format("This.Is.Job#{0}", jobId) );
 
-        for (int j = 0; j < 10; j++)
+        for (int j = 0; j < 20; j++)
         {
-          Thread.Sleep( 100 );
+          
           var jsonObj = new { text = "this is test message #" + i++ };
           var jsonString = JsonConvert.SerializeObject( jsonObj );
 
@@ -53,9 +58,12 @@ namespace CentralLog.EventGeneratorDemo
 
         CentralLogProxy.Log.JobEnd( jobId );
         i++;
+
+        stopwatch.Stop();
+        Console.WriteLine("sending messages took {0}ms",stopwatch.ElapsedMilliseconds);
       };
 
-      for (int j = 0; j < 10; j++)
+      for (int j = 0; j < 8; j++)
       {
         Task jobRun = new Task( jobMethod );
         jobRun.Start();
