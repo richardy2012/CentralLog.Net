@@ -29,6 +29,7 @@ namespace SignalRChat
       _repository.AddJobRunStart( jobId, jobRunId );
 
       Clients.All.broadcastMessage( "jobstart", "JobStarted");
+        _repository.AddStartJob(jobId, jobRunId);
     }
 
     public void JobEnd(string jobId, string jobRunId)

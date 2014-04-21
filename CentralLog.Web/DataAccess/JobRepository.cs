@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+<<<<<<< HEAD
 using CentralLog.Web.Models;
 using CommonUtilities.Repository;
+=======
+>>>>>>> e41ec9c4416322bf005b9edf58e14be41cd06adb
 using MongoDB.Bson;
 using MongoDB.Driver;
 using Newtonsoft.Json;
@@ -45,6 +48,7 @@ namespace CentralLog.Web.DataAccess
       stepCollection.Insert( logStep );
     }
 
+<<<<<<< HEAD
     internal Models.Job CreateUpdateJob(string jobId)
     {
       var jobCollection = _database.GetCollection<Job>("jobs");
@@ -87,6 +91,11 @@ namespace CentralLog.Web.DataAccess
         JobId = jobId,
         EndTimeStamp = DateTime.UtcNow
       } );
+=======
+    internal void AddStartJob(string jobId, string jobRunId)
+    {
+        //var jobCollection = _database.
+>>>>>>> e41ec9c4416322bf005b9edf58e14be41cd06adb
     }
   }
 }
