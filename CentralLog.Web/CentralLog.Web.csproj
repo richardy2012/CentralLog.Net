@@ -42,8 +42,8 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CommonUtilities">
-      <HintPath>..\..\SpacialStartup\libs\CommonUtilities.dll</HintPath>
+    <Reference Include="Antlr3.Runtime">
+      <HintPath>..\packages\WebGrease.1.1.0\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNet.SignalR.Core">
       <HintPath>..\packages\Microsoft.AspNet.SignalR.Core.2.0.2\lib\net45\Microsoft.AspNet.SignalR.Core.dll</HintPath>
@@ -86,6 +86,9 @@
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.0.0\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.Routing" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
@@ -137,9 +140,18 @@
       <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="WebActivator">
+      <HintPath>..\packages\WebActivator.1.5.3\lib\net40\WebActivator.dll</HintPath>
+    </Reference>
+    <Reference Include="WebGrease">
+      <HintPath>..\packages\WebGrease.1.1.0\lib\WebGrease.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\DurandalBundleConfig.cs" />
+    <Compile Include="App_Start\DurandalConfig.cs" />
     <Compile Include="CentralLogHub.cs" />
+    <Compile Include="Controllers\DurandalController.cs" />
     <Compile Include="DataAccess\JobRepository.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -151,13 +163,71 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Content Include="App\main.js" />
+    <Content Include="App\viewmodels\flickr.js" />
+    <Content Include="App\viewmodels\shell.js" />
+    <Content Include="App\viewmodels\welcome.js" />
+    <Content Include="App\views\detail.html" />
+    <Content Include="App\views\flickr.html" />
+    <Content Include="App\views\shell.html" />
+    <Content Include="App\views\welcome.html" />
+    <Content Include="Content\bootstrap-theme.css" />
+    <Content Include="Content\bootstrap-theme.min.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\durandal.css" />
+    <Content Include="Content\font-awesome.css" />
+    <Content Include="Content\font-awesome.min.css" />
+    <Content Include="Content\ie10mobile.css" />
+    <Content Include="Content\images\icon.png" />
+    <Content Include="Content\images\ios-startup-image-landscape.png" />
+    <Content Include="Content\images\ios-startup-image-portrait.png" />
+    <Content Include="Content\starterkit.css" />
+    <Content Include="fonts\fontawesome-webfont.svg" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="index.html" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="fonts\fontawesome-webfont.woff" />
+    <Content Include="fonts\fontawesome-webfont.ttf" />
+    <Content Include="fonts\fontawesome-webfont.eot" />
+    <Content Include="fonts\FontAwesome.otf" />
+    <Content Include="Scripts\almond-custom.js" />
+    <Content Include="Scripts\durandal\activator.js" />
+    <Content Include="Scripts\durandal\app.js" />
+    <Content Include="Scripts\durandal\binder.js" />
+    <Content Include="Scripts\durandal\composition.js" />
+    <Content Include="Scripts\durandal\events.js" />
+    <Content Include="Scripts\durandal\plugins\dialog.js" />
+    <Content Include="Scripts\durandal\plugins\history.js" />
+    <Content Include="Scripts\durandal\plugins\http.js" />
+    <Content Include="Scripts\durandal\plugins\observable.js" />
+    <Content Include="Scripts\durandal\plugins\router.js" />
+    <Content Include="Scripts\durandal\plugins\serializer.js" />
+    <Content Include="Scripts\durandal\plugins\widget.js" />
+    <Content Include="Scripts\durandal\system.js" />
+    <Content Include="Scripts\durandal\transitions\entrance.js" />
+    <Content Include="Scripts\durandal\viewEngine.js" />
+    <Content Include="Scripts\durandal\viewLocator.js" />
+    <Content Include="weyland-config.js" />
+    <Content Include="readme.md" />
     <None Include="Scripts\jquery-1.6.4-vsdoc.js" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-1.6.4.js" />
     <Content Include="Scripts\jquery-1.6.4.min.js" />
+    <None Include="Scripts\jquery-1.9.1.intellisense.js" />
+    <Content Include="Scripts\jquery-1.9.1.js" />
+    <Content Include="Scripts\jquery-1.9.1.min.js" />
     <Content Include="Scripts\jquery.signalR-2.0.2.js" />
     <Content Include="Scripts\jquery.signalR-2.0.2.min.js" />
+    <Content Include="Scripts\knockout-2.3.0.debug.js" />
+    <Content Include="Scripts\knockout-2.3.0.js" />
+    <Content Include="Scripts\r.js" />
+    <Content Include="Scripts\require.js" />
+    <Content Include="Scripts\text.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -166,10 +236,12 @@
       <DependentUpon>Web.config</DependentUpon>
     </Content>
     <Content Include="Views\Web.config" />
+    <Content Include="Scripts\jquery-1.9.1.min.map" />
+    <Content Include="Views\Durandal\Index.cshtml" />
+    <Content Include="Views\Durandal\_splash.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Controllers\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using CommonUtilities.Repository;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using Newtonsoft.Json;
@@ -42,6 +41,11 @@ namespace CentralLog.Web.DataAccess
 
       var stepCollection = _database.GetCollection( "steps" );
       stepCollection.Insert( logStep );
+    }
+
+    internal void AddStartJob(string jobId, string jobRunId)
+    {
+        //var jobCollection = _database.
     }
   }
 }
